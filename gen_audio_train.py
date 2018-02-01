@@ -5,11 +5,6 @@ from util import Util
 from pathlib import Path
 from util_audio import *
 
-raw_dir = Path('./data/raw')
-todo_dir = Path('./data/todo') # mp3 切片，人工分类 
-train_audio_dir = Path('./data/train_audio')
-train_image_dir = Path('./data/train_image')
-
 INPUT_SUFFIX = '.mp4'
 AUDIO_SUFFIX = '.mp3'
 IMAGE_SUFFIX = '.png'
@@ -27,7 +22,8 @@ def cut_audio(src: str, outdir: str, ss, t: int):
         print(cmd)
         Util.run_shell_cmd(cmd)
            
-def gen_train_audio(raw_dir, todo_dir):                                                   
+def gen_train_audio(raw_dir, todo_dir):
+    Util.create_dir(todo_dir)
     for root, dirs, filenames in os.walk(raw_dir):
         for filename in filenames:
             if filename.endswith(INPUT_SUFFIX):
@@ -48,5 +44,11 @@ def gen_train_img(train_audio_dir, train_image_dir, bins):
                         save_spectrogram_img(audio_path, image_path, bins)                
 
 if __name__ == '__main__':
-    # gen_train_audio(raw_todo_dir, todo_dir)
+    raw_dir  = Path('./data/raw')
+    todo_dir = Path('./data/todo') # mp3 切片，人工分类 
+    train_audio_dir = Path('./data/train_audio')
+    train_image_dir = Path('./data/train_image')
+
+    # gen_train_audio(raw_dir, todo_dir)
+    # 手工分类
     gen_train_img(train_audio_dir, train_image_dir, bins=64)
