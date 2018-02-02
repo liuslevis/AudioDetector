@@ -4,10 +4,35 @@ import time
 from util import Util
 from pathlib import Path
 from util_audio import *
+from datetime import datetime
 
-INPUT_SUFFIX = '.mp4'
+VIDEO_SUFFIX = '.mp4'
 AUDIO_SUFFIX = '.mp3'
 IMAGE_SUFFIX = '.png'
+
+def timestr_sec(timestr):
+    pt = datetime.strptime(timestr, '%M:%S')
+    total_seconds = pt.second + pt.minute * 60 + pt.hour * 3600
+    return total_seconds
+
+def read_txt(path):
+    ret = []
+    with open(path) as f:
+        last_end = 0
+        for line in f.readlines():
+            parts = line.lstrip().rstrip().split(',')
+            if len(parts) == 2:
+                begin, end = parts
+                begin_sec, end_sec = timestr_sec(begin), timestr_sec(end)
+                if begin_sec % 2 == 1: 
+                    begin_sec -= 1
+                if end_sec % 2 == 1:
+                    end_sec += 1
+                if last_end < begin_sec:
+                    ret.append((last_end, begin_sec, 'none'))
+                ret.append((begin_sec, end_sec, 'laugh'))
+                last_end = end_sec
+    return ret
 
 def cut_audio(src: str, outdir: str, ss, t: int):
     if type(ss) == str:
@@ -23,15 +48,22 @@ def cut_audio(src: str, outdir: str, ss, t: int):
         Util.run_shell_cmd(cmd)
            
 def gen_train_audio(raw_dir, todo_dir):
+    print('gen_train_audio', raw_dir, '->', todo_dir)
     Util.create_dir(todo_dir)
     for root, dirs, filenames in os.walk(raw_dir):
         for filename in filenames:
-            if filename.endswith(INPUT_SUFFIX):
-                n_sec = Util.get_video_sec(str(raw_dir / filename))
-                for i_sec in range(0, n_sec, 5):
-                    cut_audio(raw_dir / filename, todo_dir, i_sec, 5)  
-                # cut_audio(raw_dir / filename, todo_dir / 'none', '00:00:00', 5)
-            print(raw_dir / filename)
+            if filename.endswith('.txt'):
+                video_path = (Path(root) / filename).with_suffix(VIDEO_SUFFIX)
+                if not video_path.exists():
+                    print('Error: path not exists', video_path)
+                    continue
+                for begin, end, label in read_txt(video_path.with_suffix('.txt')):
+                    audio_dir = Path(todo_dir) / label
+                    audio_name = video_path.with_suffix(f'.sec{begin}_{end - begin}{AUDIO_SUFFIX}').name
+                    cmd = f'ffmpeg -y -ss {begin} -i {video_path} -t {end - begin} {audio_dir / audio_name}'
+                    print(cmd)
+                    Util.create_dir(audio_dir)
+                    Util.run_shell_cmd(cmd)
 
 def gen_train_img(train_audio_dir, train_image_dir, window_ms, every_ms, bins, length=-1):
     for root, dirs, filenames in os.walk(train_audio_dir):
@@ -43,12 +75,12 @@ def gen_train_img(train_audio_dir, train_image_dir, window_ms, every_ms, bins, l
                     save_spectrogram_img(audio_path, image_path, window_ms, every_ms, bins, length)
 
 if __name__ == '__main__':
-    raw_dir  = Path('data/raw')
-    todo_dir = Path('data/todo') # mp3 切片，人工分类 
-    train_audio_dir = Path('data/train_audio')
-    train_image_dir = Path('data/train_image')
+    raw_dir  = Path('data/video')
+    todo_dir = Path('data/train_audio_v2')
+    train_audio_dir = Path('data/test_audio_guitar')
+    train_image_dir = Path('data/test_image_guitar')
 
-    # gen_train_audio(raw_dir, todo_dir)
+    gen_train_audio(raw_dir, todo_dir)
     # 手工分类
     # gen_train_img(train_audio_dir, train_image_dir, window_ms=100, every_ms=50, bins=64, length=-1)
-    gen_train_img(train_audio_dir, train_image_dir, window_ms=25, every_ms=10, bins=64, length=101)
+    # gen_train_img(train_audio_dir, train_image_dir, window_ms=25, every_ms=10, bins=64, length=101)
