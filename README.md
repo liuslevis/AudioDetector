@@ -11,9 +11,16 @@
 
 受 [2] 启发， [1] 基于声音片段分类结果求平均的方法，横向对比了多种基于 CNN 的 AED 模型。
 
+## 训练经验
+
+MFCC 特征比 Mel-spectrogram 训练效果更好。训练集正负样本各 900 个，用七层 CNN 训练模型后，用测试集测试，MFCC 特征的 EER 0.28 AUC 0.82，Mel-spectrogram 的 EER 0.44 AUC 0.55。
+
+样本稀缺，尝试 data augmentation / data synthesis
+
+
 ## Setup
 
-pip3 install librosa playsound pyobjc
+pip3 install librosa playsound pyobjc sklearn
 
 ## Reference
 

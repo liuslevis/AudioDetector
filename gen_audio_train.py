@@ -65,22 +65,22 @@ def gen_train_audio(raw_dir, todo_dir):
                     Util.create_dir(audio_dir)
                     Util.run_shell_cmd(cmd)
 
-def gen_train_img(train_audio_dir, train_image_dir, window_ms, every_ms, bins, length=-1):
+def gen_train_img(train_audio_dir, train_image_dir, window_ms, every_ms, bins, length, mfcc):
     for root, dirs, filenames in os.walk(train_audio_dir):
         if len(filenames) > 5:
             for filename in filenames:
                 if AUDIO_SUFFIX in filename:
                     image_path = (Path(root.replace(str(train_audio_dir), str(train_image_dir))) / filename).with_suffix(IMAGE_SUFFIX)
                     audio_path = Path(root) / filename
-                    save_spectrogram_img(audio_path, image_path, window_ms, every_ms, bins, length)
+                    save_feature_img(audio_path, image_path, window_ms, every_ms, bins, length, mfcc)
 
 if __name__ == '__main__':
     raw_dir  = Path('data/raw')
     todo_dir = Path('data/train_audio_v2')
-    train_audio_dir = Path('data/train_audio_v2')
-    train_image_dir = Path('data/train_image_v2_window100ms')
+    train_audio_dir = Path('data/train_audio')
+    train_image_dir = Path('data/train_image_mfcc')
 
     # gen_train_audio(raw_dir, todo_dir)
     # 手工分类
-    gen_train_img(train_audio_dir, train_image_dir, window_ms=100, every_ms=50, bins=64, length=101)
-    # gen_train_img(train_audio_dir, train_image_dir, window_ms=25, every_ms=10, bins=64, length=101)
+    # gen_train_img(train_audio_dir, train_image_dir, window_ms=100, every_ms=50, bins=64, length=101, mfcc=False)
+    gen_train_img(train_audio_dir, train_image_dir, window_ms=25, every_ms=10, bins=64, length=100, mfcc=True)
