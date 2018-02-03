@@ -75,12 +75,12 @@ def gen_train_img(train_audio_dir, train_image_dir, window_ms, every_ms, bins, l
                     save_spectrogram_img(audio_path, image_path, window_ms, every_ms, bins, length)
 
 if __name__ == '__main__':
-    raw_dir  = Path('data/video')
+    raw_dir  = Path('data/raw')
     todo_dir = Path('data/train_audio_v2')
-    train_audio_dir = Path('data/test_audio_guitar')
-    train_image_dir = Path('data/test_image_guitar')
+    train_audio_dir = Path('data/train_audio_v2')
+    train_image_dir = Path('data/train_image_v2_window100ms')
 
-    gen_train_audio(raw_dir, todo_dir)
+    # gen_train_audio(raw_dir, todo_dir)
     # 手工分类
-    # gen_train_img(train_audio_dir, train_image_dir, window_ms=100, every_ms=50, bins=64, length=-1)
+    gen_train_img(train_audio_dir, train_image_dir, window_ms=100, every_ms=50, bins=64, length=101)
     # gen_train_img(train_audio_dir, train_image_dir, window_ms=25, every_ms=10, bins=64, length=101)

@@ -20,3 +20,5 @@ pip3 install librosa playsound pyobjc
 [1] Hershey, Shawn, et al. "CNN architectures for large-scale audio classification." Acoustics, Speech and Signal Processing (ICASSP), 2017 IEEE International Conference on. IEEE, 2017.
 
 [2] Ng, Joe Yue-Hei, et al. "Beyond short snippets: Deep networks for video classification." Computer Vision and Pattern Recognition (CVPR), 2015 IEEE Conference on. IEEE, 2015.
+
+[3] Knox, Mary Tai, and Nikki Mirghafori. "Automatic laughter detection using neural networks." Eighth Annual Conference of the International Speech Communication Association. 2007. [PDF](http://www.icsi.berkeley.edu/pubs/speech/laughter_v10.pdf)
