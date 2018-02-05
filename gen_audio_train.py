@@ -67,7 +67,7 @@ def gen_train_audio(raw_dir, todo_dir):
 
 def gen_train_img(train_audio_dir, train_image_dir, window_ms, every_ms, bins, length, mfcc):
     for root, dirs, filenames in os.walk(train_audio_dir):
-        if len(filenames) > 5:
+        if len(filenames) > 1:
             for filename in filenames:
                 if AUDIO_SUFFIX in filename:
                     image_path = (Path(root.replace(str(train_audio_dir), str(train_image_dir))) / filename).with_suffix(IMAGE_SUFFIX)
@@ -75,10 +75,10 @@ def gen_train_img(train_audio_dir, train_image_dir, window_ms, every_ms, bins, l
                     save_feature_img(audio_path, image_path, window_ms, every_ms, bins, length, mfcc)
 
 if __name__ == '__main__':
-    raw_dir  = Path('data/raw')
-    todo_dir = Path('data/train_audio_v2')
-    train_audio_dir = Path('data/train_audio')
-    train_image_dir = Path('data/train_image_mfcc')
+    raw_dir  = Path('data/raw_other')
+    todo_dir = Path('data/todo')
+    train_audio_dir = Path('data/train_audio_v3')
+    train_image_dir = Path('data/train_image_win25ms_v3')
 
     # gen_train_audio(raw_dir, todo_dir)
     # 手工分类

@@ -22,6 +22,10 @@ MFCC 特征比 Mel-spectrogram 训练效果更好。训练集正负样本各 900
 
 pip3 install librosa playsound pyobjc sklearn
 
+## Dataset
+
+https://research.google.com/audioset/balanced_train/laughter.html
+
 ## Reference
 
 [1] Hershey, Shawn, et al. "CNN architectures for large-scale audio classification." Acoustics, Speech and Signal Processing (ICASSP), 2017 IEEE International Conference on. IEEE, 2017.
