@@ -75,7 +75,12 @@ def gen_train_img(train_audio_dir, train_image_dir, window_ms, every_ms, bins, l
                     save_feature_img(audio_path, image_path, window_ms, every_ms, bins, length, mfcc)
 
 if __name__ == '__main__':
-    gen_train_audio(Path('data/raw_other'), Path('data/train_audio'))
+    gen_train_audio(Path('data/raw_train'), Path('data/audio_train'))
+    gen_train_audio(Path('data/raw_test'),  Path('data/audio_test'))
+
     # 手工分类
-    gen_train_img(Path('data/train_audio'), Path('data/train_image_win100ms'), window_ms=100, every_ms=50, bins=64, length=101, mfcc=False)
-    gen_train_img(Path('data/train_audio'), Path('data/train_image_mfcc'), window_ms=25, every_ms=10, bins=64, length=100, mfcc=True)
+    gen_train_img(Path('data/audio_train'), Path('data/image_win100ms_train'), window_ms=100, every_ms=50, bins=64, length=100, mfcc=False)
+    gen_train_img(Path('data/audio_test'),  Path('data/image_win100ms_test'),  window_ms=100, every_ms=50, bins=64, length=100, mfcc=False)
+
+    gen_train_img(Path('data/audio_train'), Path('data/image_mfcc_train'), window_ms=25, every_ms=10, bins=64, length=100, mfcc=True)
+    gen_train_img(Path('data/audio_test'),  Path('data/image_mfcc_test'),  window_ms=25, every_ms=10, bins=64, length=100, mfcc=True)
