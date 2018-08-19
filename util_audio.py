@@ -2,7 +2,6 @@
 #-*- encoding: utf-8 -*-
 
 import librosa
-import librosa.display
 import numpy as np
 import playsound
 import os
@@ -62,6 +61,7 @@ def calc_mfcc(audio_path, window_ms, every_ms, bins, plot=False):
     s = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=bins, n_fft=n_fft, hop_length=hop_length)
     if plot:
         import matplotlib.pyplot as plt
+        import librosa.display
         plt.figure(figsize=(10, 4))
         librosa.display.specshow(s, x_axis='time')
         plt.colorbar()
@@ -84,6 +84,7 @@ def calc_spectrogram(audio_path, window_ms=25, every_ms=10, bins=64, plot=False)
     s = cv2.resize(s, dsize=(s.shape[1], bins), interpolation=cv2.INTER_CUBIC)
     if plot:
         import matplotlib.pyplot as plt
+        import librosa.display
         plt.figure(figsize=(10, 4))
         librosa.display.specshow(s, y_axis='mel', fmax=8000)
         plt.colorbar(format='%+2.0f dB')
@@ -101,6 +102,7 @@ def plot_spectrogram(audio_path):
     s = librosa.power_to_db(s, ref=np.max)
     s = librosa.feature.mfcc(S=s)
     import matplotlib.pyplot as plt
+    import librosa.display
     plt.figure(figsize=(10, 4))
     librosa.display.specshow(s, y_axis='mel', fmax=8000, x_axis='time')
     plt.colorbar(format='%+2.0f dB')
@@ -113,6 +115,7 @@ def plot_mfcc(audio_path):
     s = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=40)
     print(s.shape)
     import matplotlib.pyplot as plt
+    import librosa.display
     plt.figure(figsize=(10, 4))
     librosa.display.specshow(s, y_axis='mel', fmax=8000, x_axis='time')
     plt.colorbar(format='%+2.0f dB')
